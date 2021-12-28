@@ -1,0 +1,12 @@
+<div id="wrapper_left">
+	<div id="left-menu" class="left-menu" style="height: 100%">
+		<div style="width: 250px;">
+		<ul>
+		<#list Session.userInfo.getMenulist() as menu>			
+			<li>${menu.MENU_NM}</li>			
+		</#list>			
+		</ul>
+		</div>    
+	</div>
+</div>
+        

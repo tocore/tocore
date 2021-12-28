@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:p="http://www.springframework.org/schema/p"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:mvc="http://www.springframework.org/schema/mvc"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+                http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+                http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+
+    <context:component-scan base-package="egovframework, oasis">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+    </context:component-scan>
+
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="webBindingInitializer">
+            <bean class="egovframework.cmmn.web.EgovBindingInitializer"/>
+        </property>
+        <!-- 
+        	message converter 등록      
+        	json, xml 등 요청 을 받아서 응답 메세지 형식을 생성 한다.  	 
+        -->
+     	<property name="messageConverters">
+			<list>
+				<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
+			</list>
+		</property>
+    </bean>
+    
+    <!-- 다국어 지원 -->
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+        <property name="interceptors">
+            <list>
+                <ref bean="localeChangeInterceptor" />
+            </list>
+        </property>
+    </bean>
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver" />
+    <!-- 쿠키를 이용한 Locale 이용시 <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver"/> -->
+    <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+        <property name="paramName" value="language" />
+    </bean>
+    
+    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="defaultErrorView" value="cmmn/egovError"/>
+        <property name="exceptionMappings">
+            <props>
+                <prop key="org.springframework.dao.DataAccessException">cmmn/dataAccessFailure</prop>
+                <prop key="org.springframework.transaction.TransactionException">cmmn/transactionFailure</prop>
+                <prop key="egovframework.rte.fdl.cmmn.exception.EgovBizException">cmmn/egovError</prop>
+                <prop key="org.springframework.security.AccessDeniedException">cmmn/egovError</prop>
+            </props>
+        </property>
+    </bean>
+
+	<!--/ configration set start /-->
+    <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <property name="templateLoaderPath"><value>/WEB-INF/view/oasis/</value></property>
+        <property name="freemarkerSettings">
+            <props>
+                <prop key="default_encoding">utf-8</prop>
+                <prop key="template_update_delay">1</prop>
+                <!-- spring message properties 사용목적 -->
+                <prop key="auto_import">/spring.ftl as spring</prop>
+            </props>         
+        </property>
+    </bean>
+    
+    <!--/ view resolver /-->
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+	    <property name="order" value="2" />
+        <property name="cache" value="true" />
+        <property name="suffix" value=".html" />
+        <property name="contentType" value="text/html; charset=UTF-8" />
+        <property name="exposeSpringMacroHelpers" value="true" />
+	</bean>
+
+    <!-- For Pagination Tag -->
+    <!-- 
+    <bean id="imageRenderer" class="egovframework.cmmn.web.EgovImgPaginationRenderer"/>
+    <bean id="paginationManager" class="egovframework.rte.ptl.mvc.tags.ui.pagination.DefaultPaginationManager">
+        <property name="rendererType">
+            <map>
+                <entry key="image" value-ref="imageRenderer"/>
+            </map>
+        </property>
+    </bean>
+     -->
+	<!-- /For Pagination Tag -->
+	
+	<!-- 별도의 모델이나 컨트롤러가 없이 URL요청이 왔을때 뷰로 연결만 해주는 경우는 굳이 컨트롤러가 필요없이 -->
+ 	<mvc:view-controller path="/help/help.do" view-name="help/help"/>
+ 	
+ 	<!-- annotation 을 이용 controller mapping 하게 함 -->
+   	<mvc:annotation-driven />
+   	<!-- 매핑 경로가 '/'인 경우 .jsp로 끝나는 요청을 제외한 모든 요청을 DispatcherServlet이 처리하게 된다.
+   	예로 든 css 파일은 @Controller에 @RequestMapping으로 설정하고 있지 않기 때문에 요청하면 404에러가 난다.
+	리소스 경로를 처리하기 위해 컨트롤러 객체를 직접 구현할 수 있지만 그것 보다는 아래와 같은 코드로 설정 추가해 주는 것이 좋다. 
+	아래 와 동일 기능
+	<mvc:resources mapping="/images/**" location="/images/" />
+   	<mvc:resources mapping="/css/**" location="/css/" />
+   	<mvc:resources mapping="/js/**"  location="/js/" />
+	-->
+   	<mvc:default-servlet-handler/>
+   
+</beans>

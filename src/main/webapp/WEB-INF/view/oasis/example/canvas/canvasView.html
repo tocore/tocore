@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title><@spring.message "title.sample"/></title>    
+    <script src="/js/import.js"></script>
+	<link rel="stylesheet" type="text/css" href="/css/materialize/materialize.min.css" />
+	<style>canvas { border: 1px solid black; }</style>
+</head>
+<body>
+<div>   	
+	<canvas id="mycanvas">캔버스를 지원하지 않는 브라우저 입니다.</canvas>
+</div>
+</body>
+<script type="text/javascript">
+	$(function (){
+		
+		//var img = document.getElementById("img_sample");
+		var canvas = document.getElementById("mycanvas");		
+		if (canvas.getContext) {
+	  		var ctx = canvas.getContext('2d');	  	
+		  	var img = new Image ();
+		  	img.src = "/images/sample/sample01.jpg";		  		
+		  	img.onload = function () {		  	
+		  		ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+		  	}
+		} else {
+		  	console.log("캔버스를 지원하지 않는 브라우저 입니다.");
+		}
+	});
+
+</script>
+</html>

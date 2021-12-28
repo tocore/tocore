@@ -1,0 +1,22 @@
+<div id="wrapper_head">
+	<!--- topnav 시작 --->
+	<header>
+		<div>
+		<ul>
+		<#if Session.userInfo.getUsername()?exists>
+			<li style="float: left;">${Session.userInfo.getUsername()}(${Session.userInfo.getUserid()})님, 반갑습니다.</li>
+		  	<li style="float: left;">
+		    <form action="/login/logout" method="POST">
+		        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+		        <button type="submit">로그아웃</button>
+		    </form>
+		    <li>
+		<#else>
+			<a href="/login/login">로그인</a>
+		</#if>
+		</ul>
+		</div>
+	</header>
+	<!------topnav 끝 --->
+</div>
+    

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+	<bean name="propertiesService" class="egovframework.rte.fdl.property.impl.EgovPropertyServiceImpl" destroy-method="destroy">
+		<property name="properties">
+	        <map>
+	        	<entry key="pageUnit" value="10"/>
+	        	<entry key="pageSize" value="10"/>	        	
+	      		<entry key="upload.posblAtchFileSize" value="104857600"/><!-- 최대업로더 사이즈 -->
+                <entry key="upload.fileStorePath" value="D:\project\marketAdmin\workspace\onlineMarket\src\main\webapp\upload\"/><!-- 업로드 위치 --> 
+                <entry key="upload.tempFileStorePath" value="D:\marketAdmin\file\temp\"/><!-- 임시 업로드 위치 html5 ajax uplod 용-->  
+                <entry key="upload.extendWhiteList" value="jpg,JPG,jpeg,JPEG,png,PNG,gif,GIF,xls,xlsx,XLS,XLSX"/><!-- 업로드 가능 확장자 --> 
+                <entry key="pdf.font" value="c:\malgun.ttf"/><!-- pdf 사용 할 한글 font 지정 -->
+                <entry key="aes.password" value="U2FsdGVkX19FNY+k7wOX/EUCT+ykMITvGkDh/o1M+Jc="/><!-- AES 패스워드 -->          
+                <entry key="system.env" value="DEV"/><!-- DEV: 개발모드, RUN: 운영모드 -->
+	        </map>
+		</property>
+	</bean>
+</beans>	

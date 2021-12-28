@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title><@spring.message "title.sample"/></title>    
+    <script src="/js/import.js"></script>
+	<link rel="stylesheet" type="text/css" href="/css/materialize/materialize.min.css" />
+</head>
+<body>
+<div class="login-wrap">   
+    <div class="login-form">
+    	<p class="intro-tx"><strong>ID와 PW를 입력하세요.</strong></p>
+         <form method="post" action="/login"> 
+         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+         	<ul>
+         		<li>
+         			<input type="text" id="ID" name="ID" value="" class="form-control" placeholder="아이디를 입력해주세요.">
+         		</li>
+         		<li>
+         			<input type="password" id="PWD" name="PWD" value="" class="form-control" placeholder="비밀번호를 입력해주세요.">
+         		</li>
+         	</ul>
+            <button class="btn btn-submit">LOGIN</button>
+        </form>        
+    </div> 
+</div>
+<div class="row">
+  <div class="input-field col s6">
+    <input value="Alvin" id="first_name2" type="text" class="validate">
+    <label class="active" for="first_name2">First Name</label>
+  </div>
+</div>  
+<input type="text" id="testId">
+<script type="text/javascript">
+<!--
+	<#if fail_login_id?exists >
+		alert("${fail_login_id} : " + "${errmsg}");
+	</#if>
+	
+  	$(document).ready(function() {
+		M.updateTextFields();
+	});
+-->
+</script>
+
+<script type="text/javascript">
+	var list = ['aaa', 'bbb', 'ccc'];
+	list.forEach(function (item) {console.log(item);});
+	// babel을 이용한 ES5로 변환 필요.
+	list.forEach((item)=>{console.log("es6 >> " + item);});
+	
+	let data1 = list.map(() => {return 'aaa'});
+	console.log(data1);
+	
+	let data2 = list.some((item) => {return (item == 'aaa')});
+	console.log(data2);
+	
+	let data3 = list.every((item) => {return (item == 'aaa')});
+	console.log(data3);
+	
+	let data4 = list.find((item) => {return (item == 'aaa')});
+	console.log(data4);
+	
+	let data5 = list.findIndex((item) => {return (item == 'bbb')});
+	console.log(data5);
+	
+</script>
+</body>
+</html>

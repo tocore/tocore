@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="oasis.member.service.impl.MemberMapper">
+    <!-- 사용자 정보를 가졍온다 -->
+    <select id="selectMember" parameterType="hashmap" resultType="member">
+    /**[memberMapper.xml][memberMapper.selectMember]**/
+    /** password: qwer1234! **/
+  		SELECT USER_ID						AS userid
+  			 , USER_NM 						AS username	
+  			 , '8eea02485166fd3a830d383b1df4786543fcfec6bf6ba205296f38474d3f80a3'	AS password 
+  			 , 'salt'						AS salt
+  			 , 20 							AS age
+  			 , 1 							AS enabled
+       	  FROM CM_USER 
+         WHERE USER_ID = #{USER_ID}
+    </select>
+    
+ 	<!-- 사용자 정보를 가졍온다 -->
+    <select id="exceldownload" parameterType="hashmap" resultType="linkedHashMap">
+    /**[memberMapper.xml][memberMapper.exceldownload]**/
+  		SELECT USER_ID						AS userid
+  			 , USER_NM 						AS username	
+  			 , '8eea02485166fd3a830d383b1df4786543fcfec6bf6ba205296f38474d3f80a3'	AS password
+  			 , 'salt'						AS salt
+  			 , 20 							AS age
+  			 , 1 							AS enabled
+       	  FROM CM_USER 
+    </select>
+    
+    <!-- 로그인 실패 횟수 증가 -->
+	<update id="loginFailCountIncrease" parameterType="hashmap">
+    /**[memberMapper.xml][memberMapper.loginFailCountUpdate]**/
+     	UPDATE 	CM_USER 
+     	   SET  LOGIN_FAIL_CNT 	= LOGIN_FAIL_CNT +1
+     	 WHERE 	USER_ID 		= #{USER_ID}	 
+    </update> 
+    
+    <!-- 로그인 실패 횟수 초기화 -->
+ 	<update id="loginFailCountInitialize" parameterType="hashmap">
+    /**[memberMapper.xml][memberMapper.loginFailCountInitialize]**/
+     	UPDATE 	CM_USER 
+     	   SET  LOGIN_FAIL_CNT 	= 0
+     	 WHERE 	USER_ID 		= #{USER_ID}	 
+    </update>   
+     
+  	<!-- 메뉴 목록 -->   
+   	<select id="selectMenuList" parameterType="hashmap" resultType="hashmap"> 
+  	/**[memberMapper.xml][memberMapper.selectMenuList]**/
+	     SELECT A.MENU_NO AS MENUMST_ID,
+	       A.MENU_NM AS MENU_NM,
+	       A.MENU_ENG_NM AS MENU_ENG_NM,
+	       A.DOMN_NO AS DMNMST_ID,
+	       A.ODR AS MENU_DPT,
+	       A.MENU_DC AS MENU_EXPL,
+	       A.MENU_ORDR AS MENU_ORD,
+	       A.PARNTS_NO AS SPIR_ID,
+	       A.PROGRM_NO AS PGM_ID,
+	       A.BBS_NO AS BLBD_ID,
+	       A.GNRL_CNTNTS_NO AS CNTNS_ID,
+	       A.MENU_USE_AT AS IS_DISPLAY,
+	       A.CNTNTS_FOM_SE AS CNTNS_TYP,
+	       A.LINK_URL AS LINK_URL,
+	       A.NEW_WNDW_AT AS NEW_WIN_YN,
+	       A.TOPMENU_AT AS TOP_YN,
+	       A.GUEST_MENU_OTHBC_AT AS GUEST_VIEW_YN,
+	       A.DELETE_AT AS DLT_YN,
+	       A.CRTR_ID AS INS_ID,
+	       A.REGIST_IP_ADRES AS INS_IP,
+	       A.CREAT_DT AS INS_DT,
+	       A.UPDUSR_ID AS UPD_ID,
+	       A.UPDT_IP_ADRES AS UPD_IP,
+	       A.UPDT_DT AS UPD_DT
+	  FROM CM_MENU_MANAGE A
+	 WHERE DOMN_NO = 1
+	   AND MENU_USE_AT = 'A'
+	   AND TOPMENU_AT = 'Y'
+	   AND MENU_NO IN( SELECT DISTINCT MENU_NO
+	                     FROM CM_GROUPBY_MENU_AUTHOR C
+	                    WHERE DOMN_NO = 1
+	                      AND C.GROUP_ID = 'B')
+	   AND DELETE_AT = 'N'
+	   AND ODR = '1'
+	   AND MENU_NO NOT IN(167)
+	 ORDER BY MENU_ORDR, MENU_NO        
+     </select>   
+</mapper>

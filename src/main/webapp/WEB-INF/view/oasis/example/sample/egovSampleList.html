@@ -1,0 +1,299 @@
+<#import "/layout/default_template.html" as layout>
+<@layout.defaultLayout>
+<link type="text/css" rel="stylesheet" href="/css/egovframework/sample.css"/>
+<form id="listForm" name="listForm" method="post">
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+    <input type="hidden" name="selectedId" />
+    <div id="content_pop">    
+    	<div id="search">
+    		<ul>
+    			<li>
+    			    <label for="searchCondition" style="visibility:hidden;">선택</label>    			    
+    				<select>
+    					<option value="1">Name</option>
+    					<option value="0">ID</option>
+    				</select>
+    			</li>
+    			<li><label for="searchKeyword" style="visibility:hidden;display:none;">키워드</label>
+                    <input type="text" id="searchKeyword" name="searchKeyword"/>
+                </li>
+    			<li>
+    	            <span class="btn_blue_l">
+    	                <a href="javascript:fn_egov_selectList();">검색</a>    	               
+    	            </span>
+    	        </li>
+            </ul>
+    	</div>
+    	<!-- List -->
+    	<div id="table">
+    		<table summary="카테고리ID, 케테고리명, 사용여부, Description, 등록자 표시하는 테이블">
+    			<caption style="visibility:hidden">카테고리ID, 케테고리명, 사용여부, Description, 등록자 표시하는 테이블</caption>
+    			<colgroup>
+    				<col width="40"/>
+    				<col width="100"/>
+    				<col width="150"/>
+    				<col width="80"/>
+    				<col width="?"/>
+    				<col width="60"/>
+    			</colgroup>
+    			<tr>
+    				<th align="center">No</th>
+    				<th align="center">카테고리ID</th>
+    				<th align="center">케테고리명</th>
+    				<th align="center">사용여부</th>
+    				<th align="center">Description</th>
+    				<th align="center">등록자 표시하는 테이블</th>
+    			</tr>    			
+    			<#list resultList as result>
+       			<tr>
+       				<td align="center" class="listtd">${result.tmplatId}</td>
+       				<td align="center" class="listtd">${result.rowNo}</td>
+       				<td align="left" class="listtd">${result.rowNo}</td>
+       				<td align="center" class="listtd">${result.rowNo}</td>
+       				<td align="center" class="listtd">${result.rowNo}</td>
+       				<td align="center" class="listtd">${result.rowNo}</td>
+       			</tr>    			
+    			</#list>
+    		</table>
+    	</div>
+    	<!-- /List --> 
+    	<div id="sysbtn">
+    	  <ul>
+    	      <li>
+    	          <span class="btn_blue_l">
+    	              <a href="javascript:fn_egov_addView();">생성</a>
+                  </span>
+              </li>
+          </ul>
+    	</div>
+    </div>
+</form>
+<input type="button" class="btn btn-submit" id="btn-submit" value="json parameter test" />
+<input type="button" class="btn btn-submit" id="btn-excel" value="excel export" />
+<input type="button" class="btn btn-submit" id="btn-csv" value="csv export" />
+<input type="button" class="btn btn-submit" id="btn-put-redis" value="redis put" />
+<input type="button" class="btn btn-submit" id="btn-get-redis" value="redis get" />
+<input type="button" class="btn btn-submit" id="btn-resttemplate" value="resttemplate" />
+<input type="button" class="btn btn-submit" id="btn-getSqlSession" value="get sqlsession" />
+<br/>
+<!-- 몽고디비 -->
+<input type="button" class="btn btn-submit" id="btn-put-mongo" value="mongo put" />
+<input type="button" class="btn btn-submit" id="btn-edit-mongo" value="mongo edit" />
+<input type="button" class="btn btn-submit" id="btn-delete-mongo" value="mongo delete" />
+<input type="button" class="btn btn-submit" id="btn-get-mongo" value="mongo get list" />
+
+<img src="" id="img1"/>
+<img src="" id="img2"/>
+<img src="" id="img3"/>
+<script type="text/javaScript" defer="defer">
+    <!--
+    /* 글 수정 화면 function */
+    function fn_egov_select(id) {
+    	document.listForm.selectedId.value = id;
+       	document.listForm.action = "/updateSampleView.do";
+       	document.listForm.submit();
+    }
+    
+    /* 글 등록 화면 function */
+    function fn_egov_addView() {
+       	document.listForm.action = "/addSample.do";
+       	document.listForm.submit();
+    }
+    
+    /* 글 목록 화면 function */
+    function fn_egov_selectList() {
+    	document.listForm.action = "/egovSample/egovSampleList";
+       	document.listForm.submit();
+    }
+    
+    /* pagination 페이지 링크 function */
+    function fn_egov_link_page(pageNo){
+    	document.listForm.pageIndex.value = pageNo;
+    	document.listForm.action = "/egovSampleList.do";
+       	document.listForm.submit();
+    }
+    
+    //-->
+</script>  
+<script type="text/javascript">
+<!--
+	$(function () {
+		
+		var url = '/egovSample/kms/json';				
+		$.AjaxCall ( 
+			url, 
+			null, 
+			function (data) { $("#searchKeyword").val(data.id); }, 
+			function () {}, 
+			false
+		);
+		
+		
+		$("#btn-submit").bind("click", function () {
+			
+			var data = [
+				{month: 1, kor: 70, math: 100, eng: 200},
+				{month: 2, kor: 70, math: 100, eng: 200}
+			];
+			
+			var params = {
+				id : "test",
+				name : "testa",
+				data : data
+			};
+			
+			$.AjaxCall ( 
+			 	'/egovSample/test/json', 
+				params, 
+				function () {}, 
+				function () {}, 
+				false
+			);
+		});
+		
+		$("#btn-excel").bind("click", function () {
+			var url = '/member/exportExcel';
+			var form = $("<form></form>");
+			form.appendTo("body");
+			form.attr("action", url);
+			form.attr("method", "post");
+			form.append("<input type=\"hidden\" name=\"${_csrf.parameterName}\" value=\"${_csrf.token}\"/>");
+			form.submit();
+			form.remove();
+		});
+		
+		$("#btn-csv").bind("click", function () {
+			var url = '/member/exportCSV';
+			var form = $("<form></form>");
+			form.appendTo("body");
+			form.attr("action", url);
+			form.attr("method", "post");
+			form.append("<input type=\"hidden\" name=\"${_csrf.parameterName}\" value=\"${_csrf.token}\"/>");
+			form.submit();
+			form.remove();
+		});
+		
+		$("#btn-put-redis").bind("click", function () {
+		
+			var url = '/test/putRedis';				
+			$.AjaxCall ( 
+				url, 
+				null, 
+				function (data) {
+					alert(data.id);
+				}, 
+				function () {}, 
+				false
+			);			
+		});
+		
+		$("#btn-get-redis").bind("click", function () {
+			
+			var params = {
+				id : "test"
+			};
+		
+			var url = '/test/getRedis';				
+			$.AjaxCall ( 
+				url, 
+				params, 
+				function (data) {
+					alert(data.reulst);
+				}, 
+				function () {}, 
+				false
+			);			
+		});
+		
+		$("#btn-resttemplate").bind("click", function () {
+			
+			var params = {
+			};
+		
+			var url = '/test/getResttemplate';				
+			$.AjaxCall ( 
+				url, 
+				params, 
+				function (data) {
+					$("#img1").attr("src", data.result[0].thumnail);
+					$("#img2").attr("src", data.result[1].thumnail);
+					$("#img3").attr("src", data.result[2].thumnail);
+				}, 
+				function () {}, 
+				false
+			);			
+		});
+		
+
+		$("#btn-put-mongo").bind("click", function () {	
+			
+			var url = '/test/appendMongo';			
+			$.AjaxCall ( 
+				url, 
+				null, 
+				function (data) {
+					alert(data.result);
+				}, 
+				function () {}, 
+				false
+			);
+		});
+		
+		$("#btn-edit-mongo").bind("click", function () {
+			var url = '/test/modifyMongo';			
+			$.AjaxCall ( 
+				url, 
+				null, 
+				function (data) {
+					alert(data.result);
+				}, 
+				function () {}, 
+				false
+			);	
+		});
+		
+		$("#btn-delete-mongo").bind("click", function () {
+			var url = '/test/removeMongo';			
+			$.AjaxCall ( 
+				url, 
+				null, 
+				function (data) {
+					alert(data.result);
+				}, 
+				function () {}, 
+				false
+			);	
+		});
+		
+		$("#btn-get-mongo").bind("click", function () {
+						
+			var url = '/test/getMongoSamplelist';			
+			$.AjaxCall ( 
+				url, 
+				null, 
+				function (data) {
+					alert(data);
+				}, 
+				function () {}, 
+				false
+			);				
+		});
+		
+		$("#btn-getSqlSession").bind("click", function () {
+			
+			var url = '/test/getMongoSamplelist';			
+			$.AjaxCall ( 
+				url, 
+				null, 
+				function (data) {
+					alert(data);
+				}, 
+				function () {}, 
+				false
+			);				
+		});
+		
+	});
+//-->
+</script>
+</@layout.defaultLayout>

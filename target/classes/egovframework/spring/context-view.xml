@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- 따로 만든 커스텀 view를 쓰기 위한 viewResolver 설정, order: 우선순위 설정 -->
+	<bean id="beanNameViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver" >
+	  <property name="order" value="1" />
+	</bean>
+	
+	<!-- 각종 bean 설정 -->		
+	<!--<bean id="fileDownload" class="com.tocore.view.FileDownloadView"></bean> -->
+	<!--<bean id="pdfView" class="com.tocore.view.PDFView"></bean> -->
+	<!--<bean id="pdfManagerView" class="com.tocore.view.PdfManagerView"></bean> -->
+	<bean id="commonExcelView" class="oasis.cmmn.view.CommonExcelView"/> 
+	<bean id="bigDataExcelView" class="oasis.cmmn.view.BigDataExcelView"/> 
+</beans>
