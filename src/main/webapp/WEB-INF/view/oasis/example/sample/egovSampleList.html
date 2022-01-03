@@ -75,6 +75,7 @@
 <input type="button" class="btn btn-submit" id="btn-get-redis" value="redis get" />
 <input type="button" class="btn btn-submit" id="btn-resttemplate" value="resttemplate" />
 <input type="button" class="btn btn-submit" id="btn-getSqlSession" value="get sqlsession" />
+<input type="button" class="btn btn-submit" id="btn-formData" value="form data message convert" />
 <br/>
 <!-- 몽고디비 -->
 <input type="button" class="btn btn-submit" id="btn-put-mongo" value="mongo put" />
@@ -123,7 +124,9 @@
 		$.AjaxCall ( 
 			url, 
 			null, 
-			function (data) { $("#searchKeyword").val(data.id); }, 
+			function (data) { 
+				$("#searchKeyword").val(data.id); 
+			}, 
 			function () {}, 
 			false
 		);
@@ -291,6 +294,20 @@
 				function () {}, 
 				false
 			);				
+		});
+		
+		$("#btn-formData").bind("click", function () {			
+			var formData = new FormData($("#frmFileUpload")[0]);
+		    $.ajax({		    	
+				url: '/test/testFormDataConvert',
+		   		processData: false,
+		    	contentType: false,
+		    	data: formData,
+		     	type: 'POST',
+		      	success: function(data) {		      	
+		      		alert("법정동 정보를 처리 하였습니다!");
+		     	}
+			});		
 		});
 		
 	});

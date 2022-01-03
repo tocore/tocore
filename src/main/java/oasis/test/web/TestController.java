@@ -36,6 +36,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -348,6 +349,21 @@ public class TestController {
 		}
 	    
 		Map<String , String> map = new HashMap<String , String>();
+		map.put("result", "ok");
+		return map;	
+	}
+	
+	
+	/**
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/testFormDataConvert")
+	public @ResponseBody Map<String , String> testFormDataConvert(@RequestBody MultiValueMap<String, String> multiValueMap) throws Exception {
+		
+		System.out.println(">>> "+ multiValueMap);
+		Map<String , String> map = new HashMap<String , String>();		
 		map.put("result", "ok");
 		return map;	
 	}
